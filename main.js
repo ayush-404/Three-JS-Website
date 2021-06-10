@@ -22,14 +22,10 @@ const pointlight = new THREE.PointLight(0xffffff, 0.8, 100);
 pointlight.position.set(5, 5, 20);
 const ambientLight = new THREE.AmbientLight(0xffffff);
 
-const gridHelper = new THREE.GridHelper(200, 50);
-const pointHelper = new THREE.PointLightHelper(pointlight);
-scene.add(pointHelper);
+
 const controls = new OrbitControls(camera, rendeder.domElement);
-scene.add(gridHelper);
 
 scene.add(pointlight, ambientLight)
-
 
 function addStar() {
   const geometry = new THREE.SphereGeometry(0.25,24,24);
@@ -46,9 +42,6 @@ function addStar() {
   scene.add(star);
 }
 
-for(var i = 0; i< 200; i++)
-  addStar()
-
 const abstractBackground = new THREE.TextureLoader().load('Abstract.jpg');
 scene.background = abstractBackground;
 
@@ -57,7 +50,6 @@ const tubby = new THREE.Mesh(
   new THREE.BoxGeometry(3,3,3),
   new THREE.MeshBasicMaterial({map: tubbyTexture})
 )
-tubby.position.set(6,6,0)
 scene.add(tubby)
 
 const Moon = new THREE.Mesh(
@@ -70,20 +62,25 @@ const Moon = new THREE.Mesh(
 Moon.position.setX(-10);
 Moon.position.z = 10;
 scene.add(Moon)
-
+tubby.position.set(3, 0, -3)
+var starCount =0
 function moveCamera(){
   const t = document.body.getBoundingClientRect().top;
   //Moon.rotation.x += 0.05;
   Moon.rotation.y += 0.075;
   //Moon.rotation.z += 0.05;
-  tubby.rotation.y += 0.01;
-  tubby.rotation.z += 0.01;
+  tubby.rotation.y += 0.05;
+  tubby.rotation.z += 0.05;
 
   camera.position.z = t * -0.015;
   camera.position.x = t * -0.0002;
   camera.position.y = t * -0.0002;
+  starCount++;
+  if (starCount < 200)
+    addStar()
 }
-
+animate()
+moveCamera();
 document.body.onscroll = moveCamera;
 // GAME LOOP BELOW
 function animate() {
@@ -96,4 +93,3 @@ function animate() {
 
   rendeder.render(scene, camera);
 }
-animate()
